@@ -1,13 +1,14 @@
+import Navbar from "./components/Navbar"
+import Home from "./pages/Home"
 
 
 function App() {
- 
+
 
   return (
     <>
-      <div>
-        <p className="bg-amber-600">Ecoomerce project</p>
-      </div>
+      <Navbar />
+      <Home />
     </>
   )
 }
