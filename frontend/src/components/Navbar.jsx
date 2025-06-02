@@ -1,57 +1,86 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { assets } from '../assets/frontend_assets/assets.js'
+import React, { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { assets } from '../assets/frontend_assets/assets.js';
+import { useUserContext } from '../context/UserContext.jsx'
+
 
 
 
 const Navbar = () => {
 
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
-    return (
-        <div className='flex items-center px-10 py-4 justify-between'>
+  const { isLogin, logout } = useUserContext()
 
-            {/*Logo Icon*/}
-            <Link to="/home">
-                <img className='w-36' src={assets.logo} />
-            </Link>
-            {/*Navigation Links*/}
-            <div className='hidden md:flex items-center gap-4 ml-4 [&>*]:hover:text-pink-500 [&>*]:transition-all [&>*]:duration-300 [&>*]:ease-in-out [&>*]:text-gray-600 [&>*]:font-semibold'>
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
 
-                <Link to="/collection">Collection</Link>
-                <Link to="/about">About</Link>
-                <Link to="/contact">Contact</Link>
-
-            </div>
-
-            <div className='flex items-center gap-4'>
-                <div className='flex [&>*]:size-5 gap-3 [&>*]:cursor-pointer [&>*]:hover:scale-110 [&>*]:transition-all [&>*]:duration-300 [&>*]:ease-in-out'>
-                    <img src={assets.search_icon} alt="" />
-                    <img src={assets.cart_icon} alt="" />
-                    <img tabIndex={0} className='peer focus:outline-none:' src={assets.profile_icon} alt="" />
-                    <img className='size-2 md:hidden' src={assets.menu_icon} alt="" />
-                </div>
-
-                {/*Dropdown Menu*/}
-                <ul className='hidden peer-focus:block absolute right-10 top-16 bg-white shadow-lg border border-gray-200 rounded-lg p-4 z-50 gap-3 
-                [&>*]:text-gray-600 [&>*]:font-semibold 
-                [&>*]:hover:text-pink-500 
-                [&>*]:transition-all [&>*]:duration-300 [&>*]:ease-in-out'>
-                    <Link to="/login">Login</Link>
-                    <Link to="/profile">My Profile</Link>
-                    <Link to="/admin">Admin Panel</Link>
-                </ul>
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
 
+  return (
+    <div className='flex items-center px-10 py-4 justify-between'>
+      <Link to="/home">
+        <img className='w-36' src={assets.logo} alt="logo" />
+      </Link>
 
+      <div className='hidden md:flex items-center gap-4 ml-4 [&>*]:hover:text-pink-500 [&>*]:transition-all [&>*]:duration-300 [&>*]:ease-in-out [&>*]:text-gray-600 [&>*]:font-semibold'>
+        <Link to="/our-collections">Collection</Link>
+        <Link to="/about">About</Link>
+        <Link to="/contact">Contact</Link>``
+      </div>
 
-                {/* <button className='bg-pink-700 px-4 py-2 rounded-lg text-white'>Login</button> */}
+      <div className='flex items-center gap-4'>
+        <div className='flex [&>*]:size-5 gap-3 [&>*]:cursor-pointer'>
+          <img src={assets.search_icon} alt="search" />
+          <Link to="/cart">
+            <img src={assets.cart_icon} alt="cart" />
+          </Link>
+          {/* Profile Dropdown */}
+          <div className='flex flex-col relative' ref={dropdownRef}>
+            <button
+              className='w-full text-left border-none bg-transparent focus:outline-none'
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              <img src={assets.profile_icon} alt='profile' className='cursor-pointer' />
+            </button>
+            <ul
+              className={`absolute right-0 top-10 w-40 bg-white border border-gray-300 rounded shadow-md py-2 z-50 ${isDropdownOpen ? 'block' : 'hidden'
+                }`}
+            >
+              {isLogin ? <li className='px-4 py-2 hover:text-pink-500 text-gray-600 font-semibold'>
+                <Link to="/" onClick={()=> {logout(); setIsDropdownOpen(false)}}>Logout</Link>
+              </li> :
+                <li className='px-4 py-2 hover:text-pink-500 text-gray-600 font-semibold'>
+                  <Link to="/login" onClick={() => setIsDropdownOpen(false)}>Login</Link>
+                </li>
+              }
 
-            </div>
+              <li className='px-4 py-2 hover:text-pink-500 text-gray-600 font-semibold'>
+                <Link to="/profile" onClick={() => setIsDropdownOpen(false)}>My Profile</Link>
+              </li>
+              <li className='px-4 py-2 hover:text-pink-500 text-gray-600 font-semibold'>
+                <Link to="/admin" onClick={() => setIsDropdownOpen(false)}>Admin Panel</Link>
+              </li>
+            </ul>
+          </div>
 
-
+          <img className='size-2 md:hidden' src={assets.menu_icon} alt="menu" />
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
 
-export default Navbar
+export default Navbar;
