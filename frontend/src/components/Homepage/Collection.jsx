@@ -1,69 +1,114 @@
-import React, { useEffect } from 'react';
-import { UseProductContext } from '../../context/ProductContext';
-import { assets } from '../../assets/frontend_assets/assets';
+import React, { useState } from 'react';
+import { UseProductContext } from '../../context/ProductContext.jsx';
+import { useUserContext } from '../../context/UserContext.jsx'
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast'
 
-const Collection = () => {
-  const { product } = UseProductContext(); // product should be an array of products
-  const [count, setCount] = React.useState(0);
+const Collection = ({ limit, paginate, perPage }) => {
+  const { product, addToCart, removeFromCart, cart = [] } = UseProductContext();
+  const { isLogin } = useUserContext();
+  const navigate = useNavigate();
 
- 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Decide which products to show
+  let displayedProducts = product;
+
+  if (paginate) {
+    // Pagination logic
+    const itemsPerPage = perPage || 20;
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+    displayedProducts = product.slice(startIdx, endIdx);
+  } else if (limit) {
+    // Limit logic for homepage
+    displayedProducts = product.slice(0, limit);
+  }
+
+  // Calculate total pages for pagination
+  const totalPages = paginate ? Math.ceil(product.length / (perPage || 20)) : 1;
 
   return (
-    <div className='flex flex-col items-center gap-10'>
-      <div className='flex gap-2 [&>*]:text-2xl [&>*]:font-medium md:[&>*]:text-4xl'>
-        <p className='text-gray-400'>Latest</p>
-        <p className=''>Collections</p>
+    <div className="flex flex-col items-center gap-6 py-10">
+      <div className="flex flex-col items-center gap-2">
+        <h2 className="text-3xl md:text-4xl font-semibold text-gray-700">
+          <span className="text-gray-400">LATEST </span>
+          <span className="text-blue-900">COLLECTIONS</span>
+        </h2>
+        <p className="text-gray-400 text-center max-w-2xl">
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the.
+        </p>
       </div>
-      <div className="flex flex-wrap justify-center gap-6">
-        {product.map((item) => (
-          <div key={item.id || item._id} className="border border-gray-500/20 rounded-md md:px-4 px-3 py-2 bg-white min-w-56 max-w-56 w-full">
-            <div className="group cursor-pointer flex items-center justify-center px-2">
-              <img className="group-hover:scale-105 transition max-w-26 md:max-w-36" src={item.image[0]} alt={item.name} />
-            </div>
-            <div className="text-gray-500/60 text-sm">
-              <p>{item.category}</p>
-              <p className="text-gray-700 font-medium text-lg truncate w-full">{item.name}</p>
-              <div className="flex items-center gap-0.5">
-                {Array(5).fill('').map((_, i) => (
-                  item.rating > i ? (
-                    <svg key={i} width="14" height="13" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M8.049.927c.3-.921 1.603-.921 1.902 0l1.294 3.983a1 1 0 0 0 .951.69h4.188c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 0 0-.364 1.118l1.295 3.983c.299.921-.756 1.688-1.54 1.118L9.589 13.63a1 1 0 0 0-1.176 0l-3.389 2.46c-.783.57-1.838-.197-1.539-1.118L4.78 10.99a1 1 0 0 0-.363-1.118L1.028 7.41c-.783-.57-.38-1.81.588-1.81h4.188a1 1 0 0 0 .95-.69z" fill="#615fff" />
-                    </svg>
-                  ) : (
-                    <svg key={i} width="14" height="13" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M8.04894 0.927049C8.3483 0.00573802 9.6517 0.00574017 9.95106 0.927051L11.2451 4.90983C11.379 5.32185 11.763 5.60081 12.1962 5.60081H16.3839C17.3527 5.60081 17.7554 6.84043 16.9717 7.40983L13.5838 9.87132C13.2333 10.126 13.0866 10.5773 13.2205 10.9894L14.5146 14.9721C14.8139 15.8934 13.7595 16.6596 12.9757 16.0902L9.58778 13.6287C9.2373 13.374 8.7627 13.374 8.41221 13.6287L5.02426 16.0902C4.24054 16.6596 3.18607 15.8934 3.48542 14.9721L4.7795 10.9894C4.91338 10.5773 4.76672 10.126 4.41623 9.87132L1.02827 7.40983C0.244561 6.84043 0.647338 5.60081 1.61606 5.60081H5.8038C6.23703 5.60081 6.62099 5.32185 6.75486 4.90983L8.04894 0.927049Z" fill="#615fff" fillOpacity="0.35" />
-                    </svg>
-                  )
-                ))}
-                <p>({item.rating})</p>
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-8 w-full max-w-7xl px-4">
+        {displayedProducts.map((item) => {
+          const cartItem = cart.find(ci => ci._id === item._id);
+
+          return (
+            <div onClick={() => navigate(`/product-list/${item._id}`)}
+              key={item._id}
+              className="flex flex-col items-center bg-white rounded-md border border-gray-200 shadow-sm p-3 cursor-pointer"
+            >
+              <div className="flex items-center justify-center h-64 w-full mb-2">
+                <img
+                  src={Array.isArray(item.image) ? item.image[0] : item.image}
+                  alt={item.name}
+                  className="object-contain h-full w-full"
+                  style={{ pointerEvents: 'none' }}
+                />
               </div>
-              <div className="flex items-end justify-between mt-3">
-                <p className="md:text-xl text-base font-medium text-pink-500">
-                  ${item.offerPrice} <span className="text-gray-500/60 md:text-sm text-xs ">${item.price}</span>
-                </p>
-                <div className="text-pink-500">
-                  {count === 0 ? (
-                    <button className="flex items-center justify-center gap-1 bg-pink-100 border border-pink-300 md:w-[80px] w-[64px] h-[34px] rounded text-pink-600 font-medium" onClick={(e) => setCount(1)}>
-                      <img className='size-4 text-pink-500' src={assets.cart_icon} />
-                      Add
-                    </button>
-                  ) : (
-                    <div className="flex items-center justify-center gap-2 md:w-20 w-16 h-[34px] bg-pink-500/25 rounded select-none">
-                      <button onClick={() => setCount((prev) => Math.max(prev - 1, 0))} className="cursor-pointer text-md px-2 h-full">
-                        -
-                      </button>
-                      <span className="w-5 text-center">{count}</span>
-                      <button onClick={() => setCount((prev) => prev + 1)} className="cursor-pointer text-md px-2 h-full">
-                        +
-                      </button>
-                    </div>
-                  )}
-                </div>
+              <p className="text-gray-700 font-medium text-base text-center mb-1">{item.name}</p>
+              <p className="text-gray-500 text-sm text-center mb-2">{item.category}</p>
+              <div className="text-black font-semibold text-lg mb-2">${item.price}</div>
+              <div className="flex gap-2 items-center">
+                <button
+                  type="button"
+                  className="bg-pink-100 border border-pink-300 w-fit px-4 h-9 rounded text-pink-600 font-medium focus:outline-none hover:bg-pink-200 transition"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!isLogin) return toast.error('Please login first')
+                    if (cartItem) {
+                      removeFromCart(item);
+                    } else {
+                      addToCart(item);
+                    }
+                  }}
+                >
+                  {cartItem ? "Remove from cart" : "Add to cart"}
+                </button>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
+      {/* Pagination Controls */}
+      {paginate && totalPages > 1 && (
+        <div className="flex gap-2 mt-6">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+            className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
+          >
+            Prev
+          </button>
+          {[...Array(totalPages)].map((_, idx) => (
+            <button
+              key={idx + 1}
+              onClick={() => setCurrentPage(idx + 1)}
+              className={`px-3 py-1 rounded ${currentPage === idx + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            >
+              {idx + 1}
+            </button>
+          ))}
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+            className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

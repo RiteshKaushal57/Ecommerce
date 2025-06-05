@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <div className='flex flex-col gap-10'>
       <Hero />
-      <Collection />
+      <Collection limit={10} paginate={false} />
     </div>
   )
 }

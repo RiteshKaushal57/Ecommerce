@@ -7,6 +7,7 @@ import userRouter from "./routes/userRoute.js";
 import cookieParser from "cookie-parser";
 import passport from "./config/passport.js";
 import jwt from "jsonwebtoken";
+import productRoute from "./routes/productRoute.js";
 
 const forever = express();
 
@@ -36,6 +37,7 @@ connectToDatabase
   });
 
 forever.use("/user", userRouter);
+forever.use('/products', productRoute)
 
 //Google OAuth
 forever.get(
