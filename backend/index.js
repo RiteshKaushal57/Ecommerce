@@ -8,6 +8,8 @@ import cookieParser from "cookie-parser";
 import passport from "./config/passport.js";
 import jwt from "jsonwebtoken";
 import productRoute from "./routes/productRoute.js";
+import CartRouter from "./routes/cartRoute.js";
+import OrderRoute from "./routes/orderRoute.js";
 
 const forever = express();
 
@@ -38,7 +40,8 @@ connectToDatabase
 
 forever.use("/user", userRouter);
 forever.use('/products', productRoute)
-
+forever.use('/cart', CartRouter)
+forever.use('/orders', OrderRoute)
 //Google OAuth
 forever.get(
   "/auth/google",

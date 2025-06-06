@@ -31,7 +31,7 @@ const Login = () => {
                 setIsLogin(true)
                 setError('')
                 toast.success('You are logged in')
-                navigate('/home')
+                navigate('/')
             }
         } catch (error) {
             setError('Error in logging.')

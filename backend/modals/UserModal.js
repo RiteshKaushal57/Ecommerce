@@ -7,7 +7,15 @@ const UserSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String },
     provider: { type: String, default: "local" },
-    profilePhoto: {type: String},
+    profilePhoto: { type: String },
+    cart: [
+      {
+        productId: { type: mongoose.Schema.Types.ObjectId, ref: "Products" },
+        quantity: { type: Number, default: 1 },
+        selectedSize: { type: String },
+        price: { type: Number },
+      },
+    ],
     isSeller: { type: Boolean, default: false },
   },
   {

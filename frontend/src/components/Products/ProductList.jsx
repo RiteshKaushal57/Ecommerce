@@ -1,27 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { UseProductContext } from '../../context/ProductContext';
-import { useUserContext } from '../../context/UserContext.jsx'
+import { useUserContext } from '../../context/UserContext.jsx';
 import { useParams } from 'react-router-dom';
-import toast from 'react-hot-toast'
+import toast from 'react-hot-toast';
 
 const ProductList = () => {
-
     const { _id } = useParams();
     const { product, cart, addToCart, removeFromCart } = UseProductContext();
+    // Find the selected product from the product context
     const selectedProduct = product.find(item => item._id === _id);
-    const [thumbnail, setThumbnail] = useState(
-        selectedProduct && selectedProduct.image && selectedProduct.image[0]
-    );
-    const cartItem = cart.find(ci => ci._id === selectedProduct._id);
-    const { isLogin } = useUserContext()
 
+    // Initialize thumbnail and selected size based on selectedProduct
+    // Use useEffect to update state if selectedProduct changes (e.g., on initial load)
+    const [thumbnail, setThumbnail] = useState(''); // Initialize with empty string
+    const [selectedSize, setSelectedSize] = useState(''); // Initialize with empty string
+
+    useEffect(() => {
+        if (selectedProduct) {
+            // Set initial thumbnail to the first image if available
+            if (selectedProduct.image && selectedProduct.image.length > 0) {
+                setThumbnail(selectedProduct.image[0]);
+            } else {
+                setThumbnail(''); // Fallback if no images
+            }
+            // Set initial selected size to the first available size if any
+            if (selectedProduct.sizes && selectedProduct.sizes.length > 0) {
+                setSelectedSize(selectedProduct.sizes[0]);
+            } else {
+                setSelectedSize(undefined); // Explicitly set to undefined if no sizes
+            }
+        }
+    }, [selectedProduct]); // Re-run when selectedProduct changes
+
+    const { isLogin } = useUserContext();
+
+    // Find if this product with the currently selected size is in the cart
+    // **IMPORTANT:** Use optional chaining for `ci.productId?._id` as it might be populated or just an ID string.
+    // Also, handle the case where `selectedSize` might be `undefined` (for products without sizes).
+    const cartItem = cart.find(
+        ci =>
+            (ci.productId?._id === selectedProduct?._id || ci.productId === selectedProduct?._id) &&
+            (ci.selectedSize === selectedSize || (!ci.selectedSize && !selectedSize))
+    );
+
+    // Handle loading state
     if (!selectedProduct) {
-        return <div>Loading...</div>;
+        return <div className="text-center py-10">Loading product details...</div>;
     }
 
+    // Function to handle adding/removing from cart
+    const handleCartAction = () => {
+        if (!isLogin) {
+            toast.error('Please login first to manage your cart.');
+            return;
+        }
+
+        // Only show size error if the product actually has sizes and none is selected
+        if (selectedProduct.sizes && selectedProduct.sizes.length > 0 && !selectedSize) {
+            toast.error('Please select a size.');
+            return;
+        }
+
+        if (cartItem) {
+            // Remove from cart: pass the product's actual ID and the selected size
+            removeFromCart(selectedProduct._id, selectedSize);
+        } else {
+            // Add to cart: pass product ID, quantity (1), selected size, and price
+            addToCart(selectedProduct._id, 1, selectedSize, selectedProduct.price);
+        }
+    };
+
     return (
-        <div className="max-w-6xl w-full px-10">
-            <p>
+        <div className="max-w-6xl w-full px-10 mx-auto py-8"> {/* Added mx-auto and py-8 for better layout */}
+            <p className="text-gray-600 mb-4">
                 <span>Home</span> /
                 <span> Products</span> /
                 <span> {selectedProduct.category}</span> /
@@ -34,23 +85,24 @@ const ProductList = () => {
                         {selectedProduct.image.map((img, idx) => (
                             <div
                                 key={idx}
-                                className="border max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer"
+                                className={`border max-w-24 rounded overflow-hidden cursor-pointer ${
+                                    thumbnail === img ? 'border-indigo-500 border-2' : 'border-gray-500/30'
+                                }`}
                                 onClick={() => setThumbnail(img)}
                             >
-                                <img src={img} alt={`Thumbnail ${idx + 1}`} />
+                                <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
                             </div>
                         ))}
                     </div>
 
-                    <div className="border border-gray-500/30 max-w-100 rounded overflow-hidden">
-                        <img src={thumbnail || selectedProduct.image[0]} alt="Selected product" />
+                    <div className="border border-gray-500/30 max-w-[400px] w-full rounded overflow-hidden flex items-center justify-center"> {/* Set max-w for responsiveness */}
+                        <img src={thumbnail || (selectedProduct.image && selectedProduct.image[0])} alt="Selected product" className="max-w-full h-auto object-contain" />
                     </div>
                 </div>
 
                 <div className="text-sm w-full md:w-1/2">
-                    <h1 className="text-3xl font-medium">{selectedProduct.name}</h1>
+                    <h1 className="text-3xl font-medium mb-2">{selectedProduct.name}</h1>
 
-                    {/* Example: Show rating stars if you have a rating property */}
                     {selectedProduct.rating && (
                         <div className="flex items-center gap-0.5 mt-1">
                             {Array(5).fill('').map((_, i) => (
@@ -84,36 +136,33 @@ const ProductList = () => {
                         }
                     </ul>
 
-                    <div className="mt-4">
-                        <p className="text-base font-medium">Available Sizes:</p>
-                        <div className="flex gap-2 mt-2">
-                            {selectedProduct.sizes && selectedProduct.sizes.map((size, idx) => (
-                                <span
-                                    key={idx}
-                                    className="px-3 py-1 border border-gray-400 rounded text-sm bg-gray-50"
-                                >
-                                    {size}
-                                </span>
-                            ))}
+                    {selectedProduct.sizes && selectedProduct.sizes.length > 0 && ( // Only show if sizes exist
+                        <div className="mt-4">
+                            <p className="text-base font-medium">Available Sizes:</p>
+                            <div className="flex gap-2 mt-2">
+                                {selectedProduct.sizes.map((size, idx) => (
+                                    <span
+                                        key={idx}
+                                        className={`px-3 py-1 border border-gray-400 rounded text-sm bg-gray-50 cursor-pointer ${
+                                            selectedSize === size ? 'bg-indigo-200 border-indigo-500' : ''
+                                        }`}
+                                        onClick={() => setSelectedSize(size)}
+                                    >
+                                        {size}
+                                    </span>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-
+                    )}
 
                     <div className="flex items-center mt-10 gap-4 text-base">
                         <button
                             className={`w-full py-3.5 cursor-pointer font-medium transition
-      ${cartItem
+                                ${cartItem
                                     ? "bg-red-100 text-red-700 hover:bg-red-200"
                                     : "bg-gray-100 text-gray-800/80 hover:bg-gray-200"}
-    `}
-                            onClick={() => {
-                                if (!isLogin) return toast.error('Please login first')
-                                if (cartItem) {
-                                    removeFromCart(selectedProduct);
-                                } else {
-                                    addToCart(selectedProduct);
-                                }
-                            }}
+                            `}
+                            onClick={handleCartAction} // Call the centralized handler
                         >
                             {cartItem ? "Remove from cart" : "Add to cart"}
                         </button>

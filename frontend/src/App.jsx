@@ -7,23 +7,29 @@ import { Toaster } from 'react-hot-toast'
 import Collection from "./components/Homepage/Collection.jsx";
 import ProductList from "./components/Products/ProductList.jsx";
 import Cart from "./components/Products/Cart.jsx";
+import Orders from "./components/Products/Orders.jsx";
+import Footer from "./components/Footer.jsx";
+import PlaceOrder from "./components/Products/PlaceOrder.jsx";
 
 
 function App() {
   return (
     <>
       <Toaster />
-        <Navbar />
-        <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/collection" element={<Collection paginate={true} perPage={20} />} />
-          <Route path="/product-list/:_id" element={<ProductList />} />
-          <Route path="/cart" element={<Cart />} />
-          
-        </Routes>
-      
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/collection" element={<Collection paginate={true} perPage={20} />} />
+        <Route path="/product-list/:_id" element={<ProductList />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/place-order" element={<PlaceOrder />} />
+
+      </Routes>
+      <Footer />
+
     </>
   );
 }
