@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation, Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import Home from "./pages/Home.jsx";
 import Login from "./components/User/Login.jsx";
@@ -10,13 +10,26 @@ import Cart from "./components/Products/Cart.jsx";
 import Orders from "./components/Products/Orders.jsx";
 import Footer from "./components/Footer.jsx";
 import PlaceOrder from "./components/Products/PlaceOrder.jsx";
+import AdminPanel from "./components/Admin Panel/AdminPanel.jsx";
+import AddProduct from "./components/Admin Panel/AddProduct.jsx";
+import AllProducts from "./components/Admin Panel/AllProducts.jsx";
 
+function AdminLayout() {
+  return (
+    <div className="flex-1">
+      <AdminPanel />
+    </div>
+  );
+}
 
 function App() {
+  const location = useLocation();
+  const hideNavbarFooter = location.pathname.startsWith("/admin-panel");
+
   return (
     <>
       <Toaster />
-      <Navbar />
+      {!hideNavbarFooter && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -27,9 +40,14 @@ function App() {
         <Route path="/orders" element={<Orders />} />
         <Route path="/place-order" element={<PlaceOrder />} />
 
+        {/* Admin Panel Nested Routes */}
+        <Route path="/admin-panel" element={<AdminLayout />}>
+          <Route index element={<AddProduct />} />
+          <Route path="overview" element={<AllProducts />} />
+          <Route path="orders" element={<Orders />} />
+        </Route>
       </Routes>
-      <Footer />
-
+      {!hideNavbarFooter && <Footer />}
     </>
   );
 }

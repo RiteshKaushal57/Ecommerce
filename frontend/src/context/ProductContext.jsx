@@ -105,7 +105,7 @@ const ProductContextProvider = ({ children }) => {
     const fetchProductsFromBackend = async () => {
         try {
             const axiosResponse = await axios.get('http://localhost:4000/products');
-            setProduct(axiosResponse?.data);
+            setProduct(axiosResponse?.data?.products || []);
             setError('');
         } catch (error) {
             console.error('Error fetching products:', error);

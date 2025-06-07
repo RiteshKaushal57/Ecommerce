@@ -87,3 +87,20 @@ export const logoutUser = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const becomeSeller = async (req, res) => {
+  try {
+    const  userId  = req.user.id
+    const user = await UserModal.findByIdAndUpdate(
+      userId,
+      { isSeller: true },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    res.json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};

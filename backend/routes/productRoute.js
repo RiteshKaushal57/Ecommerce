@@ -10,4 +10,6 @@ productRoute.get("/", getAllProducts);
 productRoute.get("/:id", getProductById);
 
 
+
+
 export default productRoute

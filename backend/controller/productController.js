@@ -4,13 +4,7 @@ import ProductModel from "../modals/ProductModel.js";
 export const getAllProducts = async (req, res) => {
   try {
     const products = await ProductModel.find({});
-
-    if (!products)
-      return res
-        .status(400)
-        .json({ success: false, message: "No product found" });
-
-    return res.status(200).json(products);
+    return res.status(200).json({ success: true, products });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -19,6 +13,7 @@ export const getAllProducts = async (req, res) => {
     });
   }
 };
+
 
 export const getProductById = async (req, res) => {
   const { id } = req.params;
