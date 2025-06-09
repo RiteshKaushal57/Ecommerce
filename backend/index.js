@@ -16,7 +16,7 @@ import jwt from "jsonwebtoken";
 const forever = express();
 
 forever.use(cors({
-  origin: "http://localhost:5173",
+  origin: "https://forever-frontend-2djc.onrender.com",
   credentials: true,
 }));
 forever.use(express.json());
@@ -51,7 +51,7 @@ forever.get(
       sameSite: "strict",
       maxAge: 3600000,
     });
-    res.redirect("http://localhost:5173");
+    res.redirect("https://forever-frontend-2djc.onrender.com");
   }
 );
 
