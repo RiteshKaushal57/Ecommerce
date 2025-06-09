@@ -55,7 +55,7 @@ const PlaceOrder = () => {
 
       // Simulate payment gateway logic here if needed
 
-      const response = await axios.post('http://localhost:4000/orders', orderData, {
+      const response = await axios.post('https://forever-backend-v7hh.onrender.com/orders', orderData, {
         withCredentials: true
       });
 

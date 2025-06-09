@@ -10,7 +10,7 @@ const Orders = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get('http://localhost:4000/orders', { withCredentials: true });
+                const response = await axios.get('https://forever-backend-v7hh.onrender.com/orders', { withCredentials: true });
                 setOrders(response.data.orders || []);
             } catch (error) {
                 setOrders([]);

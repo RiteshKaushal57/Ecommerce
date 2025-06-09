@@ -53,7 +53,7 @@ const AddProduct = () => {
       formData.append('price', price);
       formData.append('offerPrice', offerPrice);
 
-      await axios.post('http://localhost:4000/seller/add-products', formData, {
+      await axios.post('https://forever-backend-v7hh.onrender.com/seller/add-products', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
       });

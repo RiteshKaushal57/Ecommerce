@@ -13,7 +13,7 @@ const Login = () => {
     const navigate = useNavigate()
 
     const googleLogin = () => {
-        window.location.href = "http://localhost:4000/auth/google";
+        window.location.href = "https://forever-backend-v7hh.onrender.com/auth/google";
         setIsLogin(true)
     }
 

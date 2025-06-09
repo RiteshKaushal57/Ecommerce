@@ -15,7 +15,7 @@ export const UserContextProvider = ({ children }) => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const axiosResponse = await axios.get('http://localhost:4000/user/auth',
+                const axiosResponse = await axios.get('https://forever-backend-v7hh.onrender.com/user/auth',
                     { withCredentials: true }
                 )
                 if (axiosResponse.data.user) {
@@ -35,7 +35,7 @@ export const UserContextProvider = ({ children }) => {
     const register = async (firstName, lastName, email, password) => {
 
         try {
-            const axiosResponse = await axios.post('http://localhost:4000/user/register',
+            const axiosResponse = await axios.post('https://forever-backend-v7hh.onrender.com/user/register',
                 { firstName, lastName, email, password },
                 { withCredentials: true }
             )
@@ -50,7 +50,7 @@ export const UserContextProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const axiosResponse = await axios.post('http://localhost:4000/user/login',
+            const axiosResponse = await axios.post('https://forever-backend-v7hh.onrender.com/user/login',
                 { email, password },
                 { withCredentials: true }
             )
@@ -66,7 +66,7 @@ export const UserContextProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            const axiosResponse = await axios.post('http://localhost:4000/user/logout', {}, { withCredentials: true }
+            const axiosResponse = await axios.post('https://forever-backend-v7hh.onrender.com/user/logout', {}, { withCredentials: true }
             )
             setUser(null)
             setIsLogin(false)
@@ -80,7 +80,7 @@ export const UserContextProvider = ({ children }) => {
 
     const googleLogin = async () => {
         try {
-            const axiosResponse = await axios.get('http://localhost:4000/auth/google', { withCredentials: true });
+            const axiosResponse = await axios.get('https://forever-backend-v7hh.onrender.com/auth/google', { withCredentials: true });
             if (axiosResponse.data.user) {
                 setUser(axiosResponse.data.user);
                 setIsLogin(true);
@@ -96,7 +96,7 @@ export const UserContextProvider = ({ children }) => {
     const handleLoginAsSeller = async () => {
         try {
             // Make API call to update isseller to true
-            const res = await axios.patch('http://localhost:4000/user/become-seller', {
+            const res = await axios.patch('https://forever-backend-v7hh.onrender.com/user/become-seller', {
             }, { withCredentials: true });
 
             if (res.data.success) {

@@ -20,7 +20,7 @@ const ProductContextProvider = ({ children }) => {
             return;
         }
         try {
-            const axiosResponse = await axios.get('http://localhost:4000/cart', {
+            const axiosResponse = await axios.get('https://forever-backend-v7hh.onrender.com/cart', {
                 withCredentials: true,
             });
             setCart(axiosResponse?.data);
@@ -42,7 +42,7 @@ const ProductContextProvider = ({ children }) => {
         }
         try {
             const axiosResponse = await axios.post(
-                'http://localhost:4000/cart',
+                'https://forever-backend-v7hh.onrender.com/cart',
                 { productId, quantity, selectedSize, price },
                 { withCredentials: true }
             );
@@ -64,7 +64,7 @@ const ProductContextProvider = ({ children }) => {
         }
         try {
             const axiosResponse = await axios.put(
-                `http://localhost:4000/cart/${productId}`,
+                `https://forever-backend-v7hh.onrender.com/cart/${productId}`,
                 { quantity, selectedSize },
                 { withCredentials: true }
             );
@@ -86,7 +86,7 @@ const ProductContextProvider = ({ children }) => {
         }
         try {
             const axiosResponse = await axios.delete(
-                `http://localhost:4000/cart/${productId}`,
+                `https://forever-backend-v7hh.onrender.com/cart/${productId}`,
                 {
                     data: { selectedSize }, // Axios allows sending body in DELETE like this
                     withCredentials: true,
@@ -104,7 +104,7 @@ const ProductContextProvider = ({ children }) => {
 
     const fetchProductsFromBackend = async () => {
         try {
-            const axiosResponse = await axios.get('http://localhost:4000/products');
+            const axiosResponse = await axios.get('https://forever-backend-v7hh.onrender.com/products');
             setProduct(axiosResponse?.data?.products || []);
             setError('');
         } catch (error) {
@@ -115,7 +115,7 @@ const ProductContextProvider = ({ children }) => {
 
     const fetchSingleProductFromBackend = async (id) => {
         try {
-            const axiosResponse = await axios.get(`http://localhost:4000/products/${id}`);
+            const axiosResponse = await axios.get(`https://forever-backend-v7hh.onrender.com/products/${id}`);
             setSelectedProduct(axiosResponse?.data);
             setError('');
         } catch (error) {

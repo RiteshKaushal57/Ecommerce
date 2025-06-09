@@ -10,7 +10,7 @@ const AllProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get('http://localhost:4000/seller/all-products', {
+        const res = await axios.get('https://forever-backend-v7hh.onrender.com/seller/all-products', {
           withCredentials: true,
         });
         setProducts(res.data.products || []);
@@ -26,7 +26,7 @@ const AllProducts = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
     try {
-      await axios.delete(`http://localhost:4000/seller/delete-product/${id}`, {
+      await axios.delete(`https://forever-backend-v7hh.onrender.com/seller/delete-product/${id}`, {
         withCredentials: true,
       });
       setProducts(products.filter((product) => product._id !== id));
