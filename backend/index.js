@@ -16,7 +16,7 @@ import jwt from "jsonwebtoken";
 const forever = express();
 
 forever.use(cors({
-  origin: "https://forever-frontend-2djc.onrender.com",
+  origin: "https://forever-frontend-three-pi.vercel.app",
   credentials: true,
 }));
 
@@ -55,7 +55,7 @@ forever.get(
       sameSite: "strict",
       maxAge: 3600000,
     });
-    res.redirect("https://forever-frontend-2djc.onrender.com");
+    res.redirect("https://forever-frontend-three-pi.vercel.app");
   }
 );
 
