@@ -63,7 +63,3 @@ const PORT = process.env.PORT || 4000;
 forever.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-forever.get('/', (req, res) => {
-  res.send('Welcome to the Forever API');
-});
