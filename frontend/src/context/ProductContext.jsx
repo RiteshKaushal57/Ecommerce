@@ -22,7 +22,7 @@ const ProductContextProvider = ({ children }) => {
             return;
         }
         try {
-            const axiosResponse = await axios.get('process.env.Backend_URL/cart', {
+            const axiosResponse = await axios.get(`${process.env.Backend_URL}/cart`, {
                 withCredentials: true,
             });
             setCart(axiosResponse?.data);
@@ -44,7 +44,7 @@ const ProductContextProvider = ({ children }) => {
         }
         try {
             const axiosResponse = await axios.post(
-                'process.env.Backend_URL/cart',
+                `${process.env.Backend_URL}/cart`,
                 { productId, quantity, selectedSize, price },
                 { withCredentials: true }
             );
@@ -66,7 +66,7 @@ const ProductContextProvider = ({ children }) => {
         }
         try {
             const axiosResponse = await axios.put(
-                `process.env.Backend_URL/cart/${productId}`,
+                `${process.env.Backend_URL}/cart/${productId}`,
                 { quantity, selectedSize },
                 { withCredentials: true }
             );
@@ -88,7 +88,7 @@ const ProductContextProvider = ({ children }) => {
         }
         try {
             const axiosResponse = await axios.delete(
-                `process.env.Backend_URL/cart/${productId}`,
+                `${process.env.Backend_URL}/cart/${productId}`,
                 {
                     data: { selectedSize }, // Axios allows sending body in DELETE like this
                     withCredentials: true,
@@ -106,7 +106,7 @@ const ProductContextProvider = ({ children }) => {
 
     const fetchProductsFromBackend = async () => {
         try {
-            const axiosResponse = await axios.get('process.env.Backend_URL/products');
+            const axiosResponse = await axios.get(`${process.env.Backend_URL}/products`);
             setProduct(axiosResponse?.data?.products || []);
             setError('');
         } catch (error) {
@@ -117,7 +117,7 @@ const ProductContextProvider = ({ children }) => {
 
     const fetchSingleProductFromBackend = async (id) => {
         try {
-            const axiosResponse = await axios.get(`process.env.Backend_URL/products/${id}`);
+            const axiosResponse = await axios.get(`${process.env.Backend_URL}/products/${id}`);
             setSelectedProduct(axiosResponse?.data);
             setError('');
         } catch (error) {

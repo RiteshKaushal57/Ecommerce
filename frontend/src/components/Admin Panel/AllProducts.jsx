@@ -28,7 +28,7 @@ const AllProducts = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
     try {
-      await axios.delete(`process.env.Backend_URL/seller/delete-product/${id}`, {
+      await axios.delete(`${process.env.Backend_URL}/seller/delete-product/${id}`, {
         withCredentials: true,
       });
       setProducts(products.filter((product) => product._id !== id));
