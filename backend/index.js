@@ -15,10 +15,20 @@ import jwt from "jsonwebtoken";
 
 const forever = express();
 
+// forever.use(cors({
+//   origin: "https://forever-frontend-2djc.onrender.com",
+//   credentials: true,
+// }));
+
+const FRONTEND_URL = "https://forever-frontend-2djc.onrender.com";
+
 forever.use(cors({
-  origin: "https://forever-frontend-2djc.onrender.com",
+  origin: FRONTEND_URL,
   credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
+
 forever.use(express.json());
 forever.use(cookieParser());
 
