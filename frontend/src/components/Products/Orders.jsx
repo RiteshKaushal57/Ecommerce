@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
@@ -10,7 +12,7 @@ const Orders = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get('https://forever-backend-v7hh.onrender.com/orders', { withCredentials: true });
+                const response = await axios.get('process.env.Backend_URL/orders', { withCredentials: true });
                 setOrders(response.data.orders || []);
             } catch (error) {
                 setOrders([]);

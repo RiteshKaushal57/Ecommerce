@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const AddProduct = () => {
   const [images, setImages] = useState([null, null, null, null]);
@@ -53,7 +55,7 @@ const AddProduct = () => {
       formData.append('price', price);
       formData.append('offerPrice', offerPrice);
 
-      await axios.post('https://forever-backend-v7hh.onrender.com/seller/add-products', formData, {
+      await axios.post('process.env.Backend_URL/seller/add-products', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
       });

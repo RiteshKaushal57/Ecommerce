@@ -2,6 +2,8 @@ import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const UserContext = createContext()
 
@@ -15,7 +17,7 @@ export const UserContextProvider = ({ children }) => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const axiosResponse = await axios.get('https://forever-backend-v7hh.onrender.com/user/auth',
+                const axiosResponse = await axios.get('process.env.Backend_URL/user/auth',
                     { withCredentials: true }
                 )
                 if (axiosResponse.data.user) {
@@ -35,7 +37,7 @@ export const UserContextProvider = ({ children }) => {
     const register = async (firstName, lastName, email, password) => {
 
         try {
-            const axiosResponse = await axios.post('https://forever-backend-v7hh.onrender.com/user/register',
+            const axiosResponse = await axios.post('process.env.Backend_URL/user/register',
                 { firstName, lastName, email, password },
                 { withCredentials: true }
             )
@@ -50,7 +52,7 @@ export const UserContextProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const axiosResponse = await axios.post('https://forever-backend-v7hh.onrender.com/user/login',
+            const axiosResponse = await axios.post('process.env.Backend_URL/user/login',
                 { email, password },
                 { withCredentials: true }
             )
@@ -66,7 +68,7 @@ export const UserContextProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            const axiosResponse = await axios.post('https://forever-backend-v7hh.onrender.com/user/logout', {}, { withCredentials: true }
+            const axiosResponse = await axios.post('process.env.Backend_URL/user/logout', {}, { withCredentials: true }
             )
             setUser(null)
             setIsLogin(false)
@@ -80,7 +82,7 @@ export const UserContextProvider = ({ children }) => {
 
     const googleLogin = async () => {
         try {
-            const axiosResponse = await axios.get('https://forever-backend-v7hh.onrender.com/auth/google', { withCredentials: true });
+            const axiosResponse = await axios.get('process.env.Backend_URL/auth/google', { withCredentials: true });
             if (axiosResponse.data.user) {
                 setUser(axiosResponse.data.user);
                 setIsLogin(true);
@@ -96,7 +98,7 @@ export const UserContextProvider = ({ children }) => {
     const handleLoginAsSeller = async () => {
         try {
             // Make API call to update isseller to true
-            const res = await axios.patch('https://forever-backend-v7hh.onrender.com/user/become-seller', {
+            const res = await axios.patch('process.env.Backend_URL/user/become-seller', {
             }, { withCredentials: true });
 
             if (res.data.success) {

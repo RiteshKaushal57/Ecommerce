@@ -3,6 +3,8 @@ import { UseProductContext } from '../../context/ProductContext';
 import { useUserContext } from '../../context/UserContext';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import dotenv from 'dotenv'
+dotenv.config()
 
 const PlaceOrder = () => {
   const { cart } = UseProductContext();
@@ -55,7 +57,7 @@ const PlaceOrder = () => {
 
       // Simulate payment gateway logic here if needed
 
-      const response = await axios.post('https://forever-backend-v7hh.onrender.com/orders', orderData, {
+      const response = await axios.post('process.env.Backend_URL/orders', orderData, {
         withCredentials: true
       });
 

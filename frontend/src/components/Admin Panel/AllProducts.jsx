@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
@@ -10,7 +12,7 @@ const AllProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get('https://forever-backend-v7hh.onrender.com/seller/all-products', {
+        const res = await axios.get('process.env.Backend_URL/seller/all-products', {
           withCredentials: true,
         });
         setProducts(res.data.products || []);
@@ -26,7 +28,7 @@ const AllProducts = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
     try {
-      await axios.delete(`https://forever-backend-v7hh.onrender.com/seller/delete-product/${id}`, {
+      await axios.delete(`process.env.Backend_URL/seller/delete-product/${id}`, {
         withCredentials: true,
       });
       setProducts(products.filter((product) => product._id !== id));
