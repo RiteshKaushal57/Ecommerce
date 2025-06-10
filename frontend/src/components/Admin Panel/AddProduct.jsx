@@ -14,6 +14,9 @@ const AddProduct = () => {
   const [offerPrice, setOfferPrice] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const BACKEND_URL = import.meta.env.VITE_Backend_URL ?? 'http://localhost:4000';
+
+
   const handleImageChange = (e, idx) => {
     const files = e.target.files;
     if (files && files[0]) {
@@ -54,7 +57,7 @@ const AddProduct = () => {
       formData.append('price', price);
       formData.append('offerPrice', offerPrice);
 
-      await axios.post(`${process.env.REACT_APP_Backend_URL}/seller/add-products`, formData, {
+      await axios.post(`${BACKEND_URL}/seller/add-products`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
       });

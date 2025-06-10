@@ -12,11 +12,12 @@ export const UserContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isLogin, setIsLogin] = useState(false);
     const navigate = useNavigate()
-
+    const BACKEND_URL = import.meta.env.VITE_Backend_URL ?? 'http://localhost:4000';
+    
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const axiosResponse = await axios.get(`${process.env.REACT_APP_Backend_URL}/user/auth`,
+                const axiosResponse = await axios.get(`${BACKEND_URL}/user/auth`,
                     { withCredentials: true }
                 )
                 if (axiosResponse.data.user) {
@@ -36,7 +37,7 @@ export const UserContextProvider = ({ children }) => {
     const register = async (firstName, lastName, email, password) => {
 
         try {
-            const axiosResponse = await axios.post(`${process.env.REACT_APP_Backend_URL}/user/register`,
+            const axiosResponse = await axios.post(`${BACKEND_URL}/user/register`,
                 { firstName, lastName, email, password },
                 { withCredentials: true }
             )
@@ -51,7 +52,7 @@ export const UserContextProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const axiosResponse = await axios.post(`${process.env.REACT_APP_Backend_URL}/user/login`,
+            const axiosResponse = await axios.post(`${BACKEND_URL}/user/login`,
                 { email, password },
                 { withCredentials: true }
             )
@@ -67,7 +68,7 @@ export const UserContextProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            const axiosResponse = await axios.post(`${process.env.REACT_APP_Backend_URL}/user/logout`, {}, { withCredentials: true }
+            const axiosResponse = await axios.post(`${BACKEND_URL}/user/logout`, {}, { withCredentials: true }
             )
             setUser(null)
             setIsLogin(false)
@@ -80,7 +81,7 @@ export const UserContextProvider = ({ children }) => {
     }
 
     const googleLogin = () => {
-        window.location.href = `${process.env.REACT_APP_Backend_URL}/auth/google`;
+        window.location.href = `${BACKEND_URL}/auth/google`;
     };
 
 
@@ -88,7 +89,7 @@ export const UserContextProvider = ({ children }) => {
     const handleLoginAsSeller = async () => {
         try {
             // Make API call to update isseller to true
-            const res = await axios.patch(`${process.env.REACT_APP_Backend_URL}/user/become-seller`, {
+            const res = await axios.patch(`${BACKEND_URL}/user/become-seller`, {
             }, { withCredentials: true });
 
             if (res.data.success) {

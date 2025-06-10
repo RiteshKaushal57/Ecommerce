@@ -9,6 +9,8 @@ const PlaceOrder = () => {
   const { cart } = UseProductContext();
   const { user } = useUserContext();
 
+  const BACKEND_URL = import.meta.env.VITE_Backend_URL ?? 'http://localhost:4000';
+  
   // Calculate totals
   const subtotal = cart.reduce(
     (sum, item) => sum + (item.productId.price * item.quantity),
@@ -56,7 +58,7 @@ const PlaceOrder = () => {
 
       // Simulate payment gateway logic here if needed
 
-      const response = await axios.post(`${process.env.REACT_APP_Backend_URL}/orders`, orderData, {
+      const response = await axios.post(`${BACKEND_URL}/orders`, orderData, {
         withCredentials: true
       });
 

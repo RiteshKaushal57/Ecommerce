@@ -11,7 +11,8 @@ const ProductContextProvider = ({ children }) => {
     const [selectedProduct, setSelectedProduct] = useState({});
     const [error, setError] = useState(null);
     const [cart, setCart] = React.useState([]);
-
+    const BACKEND_URL = import.meta.env.VITE_Backend_URL ?? 'http://localhost:4000';
+    
     const { isLogin, user } = useUserContext();
 
     // Fetches cart items from the backend
@@ -21,7 +22,7 @@ const ProductContextProvider = ({ children }) => {
             return;
         }
         try {
-            const axiosResponse = await axios.get(`${process.env.REACT_APP_Backend_URL}/cart`, {
+            const axiosResponse = await axios.get(`${BACKEND_URL}/cart`, {
                 withCredentials: true,
             });
             setCart(axiosResponse?.data);
@@ -43,7 +44,7 @@ const ProductContextProvider = ({ children }) => {
         }
         try {
             const axiosResponse = await axios.post(
-                `${process.env.REACT_APP_Backend_URL}/cart`,
+                `${BACKEND_URL}/cart`,
                 { productId, quantity, selectedSize, price },
                 { withCredentials: true }
             );
@@ -65,7 +66,7 @@ const ProductContextProvider = ({ children }) => {
         }
         try {
             const axiosResponse = await axios.put(
-                `${process.env.REACT_APP_Backend_URL}/cart/${productId}`,
+                `${BACKEND_URL}/cart/${productId}`,
                 { quantity, selectedSize },
                 { withCredentials: true }
             );
@@ -87,7 +88,7 @@ const ProductContextProvider = ({ children }) => {
         }
         try {
             const axiosResponse = await axios.delete(
-                `${process.env.REACT_APP_Backend_URL}/cart/${productId}`,
+                `${BACKEND_URL}/cart/${productId}`,
                 {
                     data: { selectedSize }, // Axios allows sending body in DELETE like this
                     withCredentials: true,
@@ -105,7 +106,7 @@ const ProductContextProvider = ({ children }) => {
 
     const fetchProductsFromBackend = async () => {
         try {
-            const axiosResponse = await axios.get(`${process.env.REACT_APP_Backend_URL}/products`);
+            const axiosResponse = await axios.get(`${BACKEND_URL}/products`);
             setProduct(axiosResponse?.data?.products || []);
             setError('');
         } catch (error) {
@@ -116,7 +117,7 @@ const ProductContextProvider = ({ children }) => {
 
     const fetchSingleProductFromBackend = async (id) => {
         try {
-            const axiosResponse = await axios.get(`${process.env.REACT_APP_Backend_URL}/products/${id}`);
+            const axiosResponse = await axios.get(`${BACKEND_URL}/products/${id}`);
             setSelectedProduct(axiosResponse?.data);
             setError('');
         } catch (error) {

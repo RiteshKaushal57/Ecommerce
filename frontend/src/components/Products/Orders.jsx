@@ -4,13 +4,14 @@ import axios from 'axios';
 const Orders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const BACKEND_URL = import.meta.env.VITE_Backend_URL ?? 'http://localhost:4000';
+    
     const boxIcon = "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/e-commerce/boxIcon.svg"
 
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_Backend_URL}/orders`, { withCredentials: true });
+                const response = await axios.get(`${BACKEND_URL}/orders`, { withCredentials: true });
                 setOrders(response.data.orders || []);
             } catch (error) {
                 setOrders([]);

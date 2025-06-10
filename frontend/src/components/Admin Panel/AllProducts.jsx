@@ -7,11 +7,13 @@ const AllProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const BACKEND_URL = import.meta.env.VITE_Backend_URL ?? 'http://localhost:4000';
+
   // Fetch products from backend
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_Backend_URL}/seller/all-products`, {
+        const res = await axios.get(`${BACKEND_URL}/seller/all-products`, {
           withCredentials: true,
         });
         setProducts(res.data.products || []);
@@ -27,7 +29,7 @@ const AllProducts = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
     try {
-      await axios.delete(`${process.env.REACT_APP_Backend_URL}/seller/delete-product/${id}`, {
+      await axios.delete(`${BACKEND_URL}/seller/delete-product/${id}`, {
         withCredentials: true,
       });
       setProducts(products.filter((product) => product._id !== id));
