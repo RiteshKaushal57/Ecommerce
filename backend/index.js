@@ -15,19 +15,11 @@ import jwt from "jsonwebtoken";
 
 const forever = express();
 
-// forever.use(cors({
-//   origin: "https://forever-frontend-2djc.onrender.com",
-//   credentials: true,
-// }));
-
-const FRONTEND_URL = "https://forever-frontend-2djc.onrender.com";
-
 forever.use(cors({
-  origin: FRONTEND_URL,
+  origin: "https://forever-frontend-2djc.onrender.com",
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
 }));
+
 
 forever.use(express.json());
 forever.use(cookieParser());
@@ -57,10 +49,10 @@ forever.get(
     const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: none,
-      // secure: process.env.NODE_ENV === "production",
-      // sameSite: "strict",
+      // secure: true,
+      // sameSite: none,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
       maxAge: 3600000,
     });
     res.redirect("https://forever-frontend-2djc.onrender.com");
