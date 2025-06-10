@@ -55,7 +55,7 @@ const AddProduct = () => {
       formData.append('price', price);
       formData.append('offerPrice', offerPrice);
 
-      await axios.post(`${process.env.Backend_URL}/seller/add-products`, formData, {
+      await axios.post(`${process.env.REACT_APP_Backend_URL}/seller/add-products`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
       });

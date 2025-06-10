@@ -12,7 +12,7 @@ const Orders = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get(`${process.env.Backend_URL}/orders`, { withCredentials: true });
+                const response = await axios.get(`${process.env.REACT_APP_Backend_URL}/orders`, { withCredentials: true });
                 setOrders(response.data.orders || []);
             } catch (error) {
                 setOrders([]);

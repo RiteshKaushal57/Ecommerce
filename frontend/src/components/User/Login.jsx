@@ -15,7 +15,7 @@ const Login = () => {
     const navigate = useNavigate()
 
     const googleLogin = () => {
-        window.location.href = `${process.env.Backend_URL}/auth/google`;
+        window.location.href = `${process.env.REACT_APP_Backend_URL}/auth/google`;
         setIsLogin(true)
     }
 

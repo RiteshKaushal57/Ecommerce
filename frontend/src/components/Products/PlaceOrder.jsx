@@ -57,7 +57,7 @@ const PlaceOrder = () => {
 
       // Simulate payment gateway logic here if needed
 
-      const response = await axios.post(`${process.env.Backend_URL}/orders`, orderData, {
+      const response = await axios.post(`${process.env.REACT_APP_Backend_URL}/orders`, orderData, {
         withCredentials: true
       });
 
