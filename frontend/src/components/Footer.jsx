@@ -21,9 +21,8 @@ const Footer = () => {
                             <h2 class="font-semibold mb-5 text-gray-800">Company</h2>
                             <ul class="text-sm space-y-2">
                                 <li><Link to='/collection'>Collections</Link ></li>
-                                <li><Link to='/' >About us</Link></li>
-                                <li><Link to='/' >Contact us</Link ></li>
-                                <li><Link to='/'>Privacy policy</Link></li>
+                                <li><Link to='/about' >About us</Link></li>
+                                <li><Link to='/contact' >Contact us</Link ></li>
                             </ul>
                         </div>
                         <div>
