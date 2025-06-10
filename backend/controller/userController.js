@@ -40,7 +40,6 @@ export const loginUser = async (req, res) => {
   try {
     const user = await UserModal.findOne({ email });
     if (!user) {
-
       return res.status(404).json({ message: "User not found" });
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -54,8 +53,10 @@ export const loginUser = async (req, res) => {
     res
       .cookie("token", token, {
         httpOnly: true,
-        secure: false,
-        sameSite: "strict",
+        secure: true,
+        sameSite: none,
+        // secure: false,
+        // sameSite: "strict",
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       })
       .json({
@@ -90,17 +91,19 @@ export const logoutUser = async (req, res) => {
 
 export const becomeSeller = async (req, res) => {
   try {
-    const  userId  = req.user.id
+    const userId = req.user.id;
     const user = await UserModal.findByIdAndUpdate(
       userId,
       { isSeller: true },
       { new: true }
     );
     if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
     res.json({ success: true, user });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error' });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
