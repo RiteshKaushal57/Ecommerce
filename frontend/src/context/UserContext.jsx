@@ -79,19 +79,10 @@ export const UserContextProvider = ({ children }) => {
         }
     }
 
-    const googleLogin = async () => {
-        try {
-            const axiosResponse = await axios.get(`${process.env.REACT_APP_Backend_URL}/auth/google`, { withCredentials: true });
-            if (axiosResponse.data.user) {
-                setUser(axiosResponse.data.user);
-                setIsLogin(true);
-            }
-        } catch (error) {
-            console.error('Google login failed:', error);
-            setUser(null);
-            setIsLogin(false);
-        }
-    }
+    const googleLogin = () => {
+        window.location.href = `${process.env.REACT_APP_Backend_URL}/auth/google`;
+    };
+
 
     // Handler for "Login as Seller"
     const handleLoginAsSeller = async () => {

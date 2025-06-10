@@ -49,10 +49,10 @@ forever.get(
     const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
     res.cookie("token", token, {
       httpOnly: true,
-      // secure: true,
-      // sameSite: none,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: true,
+      sameSite: none,
+      // secure: process.env.NODE_ENV === "production",
+      // sameSite: "strict",
       maxAge: 3600000,
     });
     res.redirect("https://forever-frontend-three-pi.vercel.app");
