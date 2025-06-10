@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import dotenv from 'dotenv';
-dotenv.config();
+
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);

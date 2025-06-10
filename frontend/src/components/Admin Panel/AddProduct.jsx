@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import dotenv from 'dotenv';
-dotenv.config();
+
 
 const AddProduct = () => {
   const [images, setImages] = useState([null, null, null, null]);

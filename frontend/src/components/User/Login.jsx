@@ -3,8 +3,7 @@ import { useUserContext } from '../../context/UserContext'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
-import dotenv from 'dotenv'
-dotenv.config()
+
 
 const Login = () => {
 

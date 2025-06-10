@@ -2,8 +2,7 @@ import React, { useState, createContext, useContext, useEffect } from 'react';
 import { useUserContext } from './UserContext.jsx';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import dotenv from 'dotenv';
-dotenv.config();
+
 
 const ProductContext = createContext();
 

@@ -3,8 +3,7 @@ import { UseProductContext } from '../../context/ProductContext';
 import { useUserContext } from '../../context/UserContext';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import dotenv from 'dotenv'
-dotenv.config()
+
 
 const PlaceOrder = () => {
   const { cart } = UseProductContext();
