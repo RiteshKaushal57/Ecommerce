@@ -3,34 +3,30 @@ import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-
 const UserContext = createContext()
 
+const BACKEND_URL = import.meta.env.VITE_Backend_URL ?? 'http://localhost:4000';
+
 export const UserContextProvider = ({ children }) => {
-
-
     const [user, setUser] = useState(null);
     const [isLogin, setIsLogin] = useState(false);
-    const navigate = useNavigate()
-    const BACKEND_URL = import.meta.env.VITE_Backend_URL ?? 'http://localhost:4000';
-    
+    const navigate = useNavigate();
+
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const axiosResponse = await axios.get(`${BACKEND_URL}/user/auth`,
-                    { withCredentials: true }
-                )
-                if (axiosResponse.data.user) {
-                    setUser(axiosResponse.data.user)
-                    setIsLogin(true)
+                const res = await axios.get(`${BACKEND_URL}/user/auth`, { withCredentials: true });
+                if (res.data.user) {
+                    setUser(res.data.user);
+                    setIsLogin(true);
                 }
-            } catch (error) {
-                setUser(null)
-                setIsLogin(false)
+            } catch {
+                setUser(null);
+                setIsLogin(false);
             }
-        }
-        checkAuth()
-    }, [])
+        };
+        checkAuth();
+    }, []);
 
     //Register function
 
